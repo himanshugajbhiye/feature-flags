@@ -16,7 +16,18 @@ import (
 	"feature-flags/internal/handlers"
 	"feature-flags/internal/repository/mongodb"
 	"feature-flags/internal/services"
+
+	_ "feature-flags/docs" // This is important!
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title Feature Flags API
+// @version 1.0
+// @description API for managing feature flags and dependencies
+// @host localhost:8080
+// @BasePath /
 
 func main() {
 	// MongoDB connection
@@ -47,6 +58,9 @@ func main() {
 
 	// Initialize router
 	r := gin.Default()
+
+	// Swagger docs route
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Feature routes
 	features := r.Group("/api/features")

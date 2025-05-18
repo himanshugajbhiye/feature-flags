@@ -1,0 +1,214 @@
+basePath: /
+definitions:
+  handlers.AddDependencyRequest:
+    properties:
+      child_id:
+        type: string
+      parent_id:
+        type: string
+    required:
+    - child_id
+    - parent_id
+    type: object
+  handlers.CreateFeatureRequest:
+    properties:
+      is_enabled:
+        type: boolean
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/models.FeatureType'
+    required:
+    - name
+    - type
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
+  models.Feature:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_enabled:
+        type: boolean
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/models.FeatureType'
+      updated_at:
+        type: string
+    type: object
+  models.FeatureType:
+    enum:
+    - basic
+    - premium
+    - enterprise
+    type: string
+    x-enum-varnames:
+    - FeatureTypeBasic
+    - FeatureTypePremium
+    - FeatureTypeEnterprise
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing feature flags and dependencies
+  title: Feature Flags API
+  version: "1.0"
+paths:
+  /api/features:
+    post:
+      consumes:
+      - application/json
+      description: Create a new feature flag
+      parameters:
+      - description: Feature to create
+        in: body
+        name: feature
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateFeatureRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Feature'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Create a new feature
+      tags:
+      - features
+  /api/features/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get the status of a feature by ID
+      parameters:
+      - description: Feature ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Feature'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get feature status
+      tags:
+      - features
+  /api/features/{id}/disable:
+    post:
+      consumes:
+      - application/json
+      description: Disable a feature by ID
+      parameters:
+      - description: Feature ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Disable a feature
+      tags:
+      - features
+  /api/features/{id}/enable:
+    post:
+      consumes:
+      - application/json
+      description: Enable a feature by ID
+      parameters:
+      - description: Feature ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Enable a feature
+      tags:
+      - features
+  /api/features/dependencies:
+    post:
+      consumes:
+      - application/json
+      description: Add a parent-child dependency between two features
+      parameters:
+      - description: Dependency to add
+        in: body
+        name: dependency
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AddDependencyRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Add a dependency between features
+      tags:
+      - features
+swagger: "2.0"
