@@ -44,6 +44,20 @@ This project is a feature flags management system built with Go, Gin, and MongoD
 - `cmd/` - Main application entry point
 - `internal/` - Application code (handlers, services, models, repositories)
 
+## API Documentation (Swagger)
+
+Interactive API documentation is available via Swagger UI.
+
+- After running the service, open your browser and go to:
+  
+  [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+
+- You can view all endpoints, schemas, and try out requests directly from the UI.
+
+- The OpenAPI/Swagger JSON spec is available at:
+  
+  [http://localhost:8080/swagger/doc.json](http://localhost:8080/swagger/doc.json)
+
 ---
 
 Feel free to contribute or open issues for improvements! 
